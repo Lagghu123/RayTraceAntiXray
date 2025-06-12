@@ -1,0 +1,32 @@
+name: Build Minecraft Plugin
+
+on:
+  push:
+    branches:
+      - main # Hoặc tên branch chính của bạn (ví dụ: master)
+  pull_request:
+    branches:
+      - main # Hoặc tên branch chính của bạn
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4 # Checkout mã nguồn của bạn
+
+    - name: Set up JDK 17 # Minecraft hiện đại thường yêu cầu Java 17 trở lên
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin' # Hoặc 'adopt'
+
+    - name: Build with Maven
+      run: mvn clean package
+
+    - name: Upload plugin artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: RayTraceAntiXray-plugin
+        path: target/*.jar # Đường dẫn đến file JAR đã được build. Thường nằm trong thư mục 'target'.
+        retention-days: 7 # Thời gian lưu trữ artifact (tùy chọn)
